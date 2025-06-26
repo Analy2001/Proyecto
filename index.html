@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reciclatón Escolar - Inicio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4fdf6;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #227744;
+    }
+    nav {
+      background: #cceee0;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #115533;
+      font-weight: bold;
+    }
+    .contenido {
+      max-width: 800px;
+      margin: auto;
+    }
+    .galeria img {
+      width: 180px;
+      margin: 10px;
+      border-radius: 10px;
+    }
+    video {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 10px;
+    }
+    .juego {
+      background: #fff;
+      padding: 20px;
+      border: 2px solid #227744;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      background: #227744;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .memoria-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 60px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .memoria-card {
+      background-color: #b6e1cf;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="pec.html">Proyecto PEC</a>
+    <a href="informatica.html">Carrera Informática</a>
+  </nav>
+  <div class="contenido">
+    <h1>Bienvenidos al Reciclatón Escolar</h1>
+    <p class="lead">Este sitio muestra nuestro trabajo en el Proyecto PEC, reciclaje y aportaciones desde la carrera de Informática.</p>
+
+    <h2>¿Por qué hacer un Reciclatón?</h2>
+    <ul>
+      <li>Reducimos la contaminación.</li>
+      <li>Educamos a nuestra comunidad.</li>
+      <li>Reutilizamos materiales para nuevos proyectos.</li>
+    </ul>
+
+    <h2>Galería de Actividades</h2>
+    <div class="galeria">
+      <img src="Carlos.jpg" alt="Recolección">
+      <img src="Sasha.jpg" alt="Taller">
+      <img src="Manuel.jpg" alt="Material Electrónico">
+      <img src="Sara.jpg" alt="Entrega">
+    </div>
+
+    <h2>Video Resumen</h2>
+    <video controls>
+      <source src="Camila.mp4" type="video/mp4" />
+      Tu navegador no soporta videos HTML5.
+    </video>
+
+    <div class="juego">
+      <h3>Juego: ¿Qué se recicla?</h3>
+      <p>¿Cuál de estos objetos no es reciclable?</p>
+      <button onclick="respuesta('papel')">Papel</button>
+      <button onclick="respuesta('vidrio')">Vidrio</button>
+      <button onclick="respuesta('espejo')">Espejo</button>
+      <p id="resultado"></p>
+    </div>
+
+    <div class="juego">
+      <h3>Juego de Memoria: Encuentra el par</h3>
+      <div class="memoria-grid" id="memoria"></div>
+      <p id="mensaje-memoria"></p>
+    </div>
+  </div>
+
+  <script>
+    function respuesta(valor) {
+      let mensaje = document.getElementById("resultado");
+      if (valor === "espejo") {
+        mensaje.textContent = "¡Correcto! El espejo no es reciclable fácilmente.";
+      } else {
+        mensaje.textContent = "Ups, veo que esa no es la respuesta correcta.";
+      }
+    }
+
+    // Juego de memoria básico
+    const emojis = [♻️', '🗑️', '♻️', '🗑️'];
+    let seleccion = [];
+    let bloqueado = false;
+
+    function iniciarMemoria() {
+      const grid = document.getElementById('memoria');
+      const mezcla = [...emojis].sort(() => Math.random() - 0.5);
+      grid.innerHTML = '';
+
+      mezcla.forEach((simbolo, index) => {
+        const card = document.createElement('div');
+        card.className = 'memoria-card';
+        card.textContent = '?';
+        card.dataset.simbolo = simbolo;
+        card.dataset.index = index;
+
+        card.addEventListener('click', function() {
+          if (bloqueado || this.textContent !== '?') return;
+
+          this.textContent = this.dataset.simbolo;
+          seleccion.push(this);
+
+          if (seleccion.length === 2) {
+            bloqueado = true;
+            setTimeout(() => {
+              if (seleccion[0].dataset.simbolo === seleccion[1].dataset.simbolo) {
+                document.getElementById('mensaje-memoria').textContent = '¡Correcto, encontraste un par!';
+              } else {
+                seleccion[0].textContent = '?';
+                seleccion[1].textContent = '?';
+                document.getElementById('mensaje-memoria').textContent = 'Ups, esos no son iguales.';
+              }
+              seleccion = [];
+              bloqueado = false;
+            }, 1000);
+          }
+        });
+
+        grid.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
