@@ -76,11 +76,9 @@
     }
   </style>
 </head>
-<body>
+<body onload="iniciarMemoria()">
   <nav>
     <a href="index.html">Inicio</a>
-    <a href="pec.html">Proyecto PEC</a>
-    <a href="informatica.html">Carrera Informática</a>
   </nav>
   <div class="contenido">
     <h1>Bienvenidos al Reciclatón Escolar</h1>
@@ -118,6 +116,7 @@
 
     <div class="juego">
       <h3>Juego de Memoria: Encuentra el par</h3>
+      <button onclick="iniciarMemoria()">Reiniciar Memoria</button>
       <div class="memoria-grid" id="memoria"></div>
       <p id="mensaje-memoria"></p>
     </div>
@@ -125,20 +124,25 @@
 
   <script>
     function respuesta(valor) {
-      let mensaje = document.getElementById("resultado");
+      const mensaje = document.getElementById("resultado");
+      const botones = document.querySelectorAll('.juego:first-of-type button');
       if (valor === "espejo") {
         mensaje.textContent = "¡Correcto! El espejo no es reciclable fácilmente.";
       } else {
         mensaje.textContent = "Ups, veo que esa no es la respuesta correcta.";
       }
+      botones.forEach(b => b.disabled = true);
     }
 
-    // Juego de memoria básico
-    const emojis = [♻️', '🗑️', '♻️', '🗑️'];
+    const emojis = ['♻', '🗑', '♻', '🗑'];
     let seleccion = [];
     let bloqueado = false;
 
     function iniciarMemoria() {
+      seleccion = [];
+      bloqueado = false;
+      document.getElementById('mensaje-memoria').textContent = '';
+
       const grid = document.getElementById('memoria');
       const mezcla = [...emojis].sort(() => Math.random() - 0.5);
       grid.innerHTML = '';
@@ -160,11 +164,13 @@
             bloqueado = true;
             setTimeout(() => {
               if (seleccion[0].dataset.simbolo === seleccion[1].dataset.simbolo) {
-                document.getElementById('mensaje-memoria').textContent = '¡Correcto, encontraste un par!';
+                document.getElementById('mensaje-memoria')
+                  .textContent = '¡Correcto, encontraste un par!';
               } else {
                 seleccion[0].textContent = '?';
                 seleccion[1].textContent = '?';
-                document.getElementById('mensaje-memoria').textContent = 'Ups, esos no son iguales.';
+                document.getElementById('mensaje-memoria')
+                  .textContent = 'Ups, esos no son iguales.';
               }
               seleccion = [];
               bloqueado = false;
